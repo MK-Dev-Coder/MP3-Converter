@@ -1,0 +1,59 @@
+{
+  "name": "mp3-downloader-converter",
+  "version": "1.0.0",
+  "description": "MP3 downloader, converter and audio enhancer with built-in playlist",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "dist": "electron-builder --publish=never",
+    "postinstall": "electron-rebuild"
+  },
+  "keywords": [
+    "mp3",
+    "downloader",
+    "converter",
+    "audio",
+    "enhancement",
+    "playlist",
+    "electron"
+  ],
+  "author": "mikek",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "electron-rebuild": "^3.2.9"
+  },
+  "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "electron-store": "^8.1.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "lodash": "^4.17.21",
+    "node-id3": "^0.2.6"
+  },
+  "build": {
+    "appId": "com.mp3app.downloader",
+    "productName": "MP3 Downloader & Converter",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  }
+}
