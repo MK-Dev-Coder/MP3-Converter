@@ -339,7 +339,8 @@ async function downloadVideo() {
                 title: result.title,
                 artist: result.artist,
                 path: result.path,
-                duration: result.duration
+                duration: result.duration,
+                thumbnail: result.thumbnail || null
             };
             
             currentPlaylist.push(track);
@@ -560,13 +561,14 @@ function renderPlaylist() {
     currentPlaylist.forEach((track, index) => {
         const item = document.createElement('div');
         item.className = `playlist-item ${index === currentTrackIndex ? 'playing' : ''}`;
+        const thumbHtml = track.thumbnail ? `<img class="playlist-thumb" src="${track.thumbnail}" alt="art">` : `<div class="playlist-thumb placeholder"><i class="fas fa-music"></i></div>`;
         item.innerHTML = `
             <div class="playlist-item-number">${index + 1}</div>
+            <div class="playlist-item-art">${thumbHtml}</div>
             <div class="playlist-item-info">
                 <div class="playlist-item-title">${escapeHtml(track.title)}</div>
                 <div class="playlist-item-artist">${escapeHtml(track.artist)}</div>
             </div>
-            <div class="playlist-item-artist">${escapeHtml(track.artist)}</div>
             <div class="playlist-item-duration">${formatDuration(track.duration || 0)}</div>
             <div class="playlist-item-controls">
                 <button onclick="playTrack(${index})" title="Play" class="play-btn">

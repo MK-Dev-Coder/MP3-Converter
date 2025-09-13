@@ -131,10 +131,12 @@ ipcMain.handle('download-video', async (event, url, outputPath, options = {}) =>
     }
     
   const info = await ytdl.getInfo(url);
-    const title = info.videoDetails.title.replace(/[<>:"/\\|?*]/g, '');
+  const title = info.videoDetails.title.replace(/[<>:"/\\|?*]/g, '');
     const filename = `${title}.mp3`;
     const fullPath = path.join(outputPath, filename);
   const totalDurationSec = parseInt(info.videoDetails.lengthSeconds) || 0;
+  const thumbs = info.videoDetails.thumbnails || [];
+  const bestThumb = thumbs.length ? thumbs[thumbs.length - 1].url : null;
 
     return new Promise((resolve, reject) => {
       try {
@@ -204,7 +206,8 @@ ipcMain.handle('download-video', async (event, url, outputPath, options = {}) =>
                 path: fullPath,
                 title: info.videoDetails.title,
                 artist: info.videoDetails.author.name,
-                duration: parseInt(info.videoDetails.lengthSeconds)
+                duration: parseInt(info.videoDetails.lengthSeconds),
+                thumbnail: bestThumb
               });
             } catch (tagError) {
               console.warn('Error writing ID3 tags:', tagError);
@@ -214,7 +217,8 @@ ipcMain.handle('download-video', async (event, url, outputPath, options = {}) =>
                 path: fullPath,
                 title: info.videoDetails.title,
                 artist: info.videoDetails.author.name,
-                duration: parseInt(info.videoDetails.lengthSeconds)
+                duration: parseInt(info.videoDetails.lengthSeconds),
+                thumbnail: bestThumb
               });
             }
           })

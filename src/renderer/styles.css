@@ -698,7 +698,7 @@ input[type="text"]:focus, input[type="url"]:focus, select:focus {
 
 .playlist-header-row {
     display: grid;
-    grid-template-columns: 60px 1fr 200px 100px 120px;
+    grid-template-columns: 60px 64px 1fr 100px 120px;
     gap: 1rem;
     padding: 1rem 1.5rem;
     background: #f8fafc;
@@ -736,7 +736,7 @@ input[type="text"]:focus, input[type="url"]:focus, select:focus {
 
 .playlist-item {
     display: grid;
-    grid-template-columns: 60px 1fr 200px 100px 120px;
+    grid-template-columns: 60px 64px 1fr 100px 120px;
     gap: 1rem;
     padding: 1rem 1.5rem;
     cursor: pointer;
@@ -783,6 +783,31 @@ input[type="text"]:focus, input[type="url"]:focus, select:focus {
 
 .playlist-item-info {
     min-width: 0;
+}
+
+.playlist-item-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.playlist-thumb.placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    background: #edf2f7;
+    color: #a0aec0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .playlist-item-title {
