@@ -311,6 +311,12 @@ input[type="text"]:focus, input[type="url"]:focus, select:focus {
     transition: width 0.3s ease;
 }
 
+/* Ensure the download progress bar keeps its style */
+.progress-bar.download .progress-fill {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    position: relative;
+}
+
 .progress-text {
     text-align: center;
     color: #4a5568;
@@ -588,7 +594,7 @@ input[type="text"]:focus, input[type="url"]:focus, select:focus {
     margin-bottom: 0.5rem;
 }
 
-.progress-fill {
+.player-progress .progress-fill {
     position: absolute;
     top: 0;
     left: 0;
@@ -599,7 +605,7 @@ input[type="text"]:focus, input[type="url"]:focus, select:focus {
     width: 0%;
 }
 
-.progress-slider {
+.player-progress .progress-slider {
     position: absolute;
     top: 0;
     left: 0;
@@ -612,7 +618,7 @@ input[type="text"]:focus, input[type="url"]:focus, select:focus {
     cursor: pointer;
 }
 
-.progress-slider::-webkit-slider-thumb {
+.player-progress .progress-slider::-webkit-slider-thumb {
     appearance: none;
     width: 16px;
     height: 16px;
@@ -624,8 +630,8 @@ input[type="text"]:focus, input[type="url"]:focus, select:focus {
     transition: transform 0.2s ease;
 }
 
-.progress-slider:hover::-webkit-slider-thumb,
-.progress-slider:focus::-webkit-slider-thumb {
+.player-progress .progress-slider:hover::-webkit-slider-thumb,
+.player-progress .progress-slider:focus::-webkit-slider-thumb {
     transform: scale(1);
 }
 
