@@ -130,16 +130,33 @@ ipcMain.handle('download-video', async (event, url, outputPath, options = {}) =>
       throw new Error('Invalid YouTube URL');
     }
     
-    const info = await ytdl.getInfo(url);
+  const info = await ytdl.getInfo(url);
     const title = info.videoDetails.title.replace(/[<>:"/\\|?*]/g, '');
     const filename = `${title}.mp3`;
     const fullPath = path.join(outputPath, filename);
+  const totalDurationSec = parseInt(info.videoDetails.lengthSeconds) || 0;
 
     return new Promise((resolve, reject) => {
       try {
         const stream = ytdl(url, { 
           quality: 'highestaudio',
           filter: 'audioonly'
+        });
+
+        // Throttle IPC updates to avoid spamming renderer
+        let lastEmit = 0;
+        const emitProgress = (payload) => {
+          const now = Date.now();
+          if (now - lastEmit > 150) {
+            try { event.sender.send('download-progress', payload); } catch {}
+            lastEmit = now;
+          }
+        };
+
+        // Report download phase using ytdl byte progress
+        stream.on('progress', (chunkLen, downloaded, total) => {
+          const percent = total ? (downloaded / total) * 100 : 0;
+          emitProgress({ percent, downloaded, total, stage: 'downloading' });
         });
 
         ffmpeg(stream)
@@ -155,12 +172,18 @@ ipcMain.handle('download-video', async (event, url, outputPath, options = {}) =>
           ])
           .format('mp3')
           .on('progress', (progress) => {
-            event.sender.send('download-progress', {
-              percent: progress.percent || 0,
-              timemark: progress.timemark
-            });
+            // Some inputs (streams) don't provide percent; compute from timemark vs duration
+            let percent = typeof progress.percent === 'number' ? progress.percent : 0;
+            if ((!percent || Number.isNaN(percent)) && progress.timemark && totalDurationSec > 0) {
+              const hms = progress.timemark.split(':');
+              const secs = (parseInt(hms[0]) * 3600) + (parseInt(hms[1]) * 60) + parseFloat(hms[2]);
+              percent = Math.max(0, Math.min(99, (secs / totalDurationSec) * 100));
+            }
+            emitProgress({ percent, timemark: progress.timemark, stage: 'converting' });
           })
           .on('end', () => {
+            // Ensure UI reaches 100%
+            try { event.sender.send('download-progress', { percent: 100, stage: 'completed' }); } catch {}
             try {
               // Add ID3 tags
               const tags = {

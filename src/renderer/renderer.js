@@ -426,8 +426,11 @@ async function convertFiles() {
 
 // Update download progress
 function updateDownloadProgress(event, progress) {
-    downloadProgressBar.style.width = `${progress.percent || 0}%`;
-    downloadStatus.textContent = `Downloading... ${Math.round(progress.percent || 0)}%`;
+    const pct = Math.max(0, Math.min(100, Math.round(progress?.percent ?? 0)));
+    const stage = progress?.stage || 'processing';
+    downloadProgressBar.style.width = `${pct}%`;
+    const label = stage === 'downloading' ? 'Downloading' : stage === 'converting' ? 'Converting' : stage === 'completed' ? 'Completed' : 'Processing';
+    downloadStatus.textContent = `${label}... ${pct}%`;
 }
 
 // Update conversion progress
