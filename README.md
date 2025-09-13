@@ -1,5 +1,8 @@
 # MP3 Downloader & Converter
 
+[![Latest release](https://img.shields.io/github/v/release/MK-Dev-Coder/MP3-Converter?display_name=tag&sort=semver)](https://github.com/MK-Dev-Coder/MP3-Converter/releases/latest)
+
+
 A powerful Electron-based application for downloading videos from URLs, converting MP4 files to MP3, and playing your music collection with audio enhancement features.
 
 ## Features
@@ -75,6 +78,13 @@ sudo apt install ffmpeg
 npm install
 ```
 
+## Download
+
+- Windows installer and zipped builds are published on the GitHub Releases page:
+    https://github.com/MK-Dev-Coder/MP3-Converter/releases
+
+Download the latest `.exe` (NSIS installer) for Windows, or the `.zip` if you prefer a portable copy.
+
 ## Development
 
 ### Run in Development Mode
@@ -91,6 +101,21 @@ npm run build
 ```bash
 npm run dist
 ```
+
+### Publish a Release from Git tags (CI)
+
+This repo includes a GitHub Actions workflow that builds installers when you push a version tag.
+
+1. Update `package.json` version (optional)
+2. Commit your changes
+3. Create and push a tag from PowerShell:
+
+```powershell
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub Actions will build the Windows installer and attach artifacts to the Release. You can also run the workflow manually from the Actions tab.
 
 ## Usage
 
